@@ -39,7 +39,7 @@ public class DiscountManagerTest {
         mockingContext.assertIsSatisfied();
 
         // make sure that the actual value exactly equals the expected value
-        assertEquals(expectedPrice, actual);
+        assertEquals(expectedPrice, actual, 0.01);
     }
 
     @Test
@@ -62,10 +62,10 @@ public class DiscountManagerTest {
                 //i used this and not 'allowing' as allowing has the probability of not calling this function,
                 //but in this test case it is a must to be called and only once
                 oneOf(mockedDependency).isTheSpecialWeek();
+                will(returnValue(true));
 
                 //and never call getDiscountPercentage
                 never(mockedDependency).getDiscountPercentage();
-                will(returnValue(expectedPrice));
             }
         });
 
@@ -78,7 +78,7 @@ public class DiscountManagerTest {
         mockingContext.assertIsSatisfied();
 
         // make sure that the actual value exactly equals the expected value
-        assertEquals(expectedPrice, actual);
+        assertEquals(expectedPrice, actual, 0.01);
 
     }
 
@@ -94,7 +94,7 @@ public class DiscountManagerTest {
         DiscountCalculator concreteCalc= new DiscountCalculator(w);
 
         double originalPrice = 100.0;
-        double expectedPrice =concreteCalc.getDiscountPercentage(); //70.0
+        double expectedPrice = originalPrice * concreteCalc.getDiscountPercentage(); //70.0
 
         //mocking obj
         Mockery mockingContext = new Mockery();
@@ -106,7 +106,7 @@ public class DiscountManagerTest {
         mockingContext.checking(new Expectations(){
             {
                 oneOf(mockedDependency).getDiscountPercentage();
-                    will(returnValue(expectedPrice));
+                    will(returnValue(7));
 
                 oneOf(mockedDependency).isTheSpecialWeek();
                     will(returnValue(false));
@@ -123,7 +123,7 @@ public class DiscountManagerTest {
         mockingContext.assertIsSatisfied();
 
         // make sure that the actual value exactly equals the expected value
-        assertEquals(expectedPrice, actual);
+        assertEquals(expectedPrice, actual, 0.01);
 
     }
 
@@ -139,7 +139,7 @@ public class DiscountManagerTest {
         DiscountCalculator concreteCalc= new DiscountCalculator(w);
 
         double originalPrice = 100.0;
-        double expectedPrice =concreteCalc.getDiscountPercentage(); //50.0
+        double expectedPrice = originalPrice* concreteCalc.getDiscountPercentage(); //50.0
 
         //mocking obj
         Mockery mockingContext = new Mockery();
@@ -151,7 +151,7 @@ public class DiscountManagerTest {
         mockingContext.checking(new Expectations(){
             {
                 oneOf(mockedDependency).getDiscountPercentage();
-                    will(returnValue(expectedPrice));
+                    will(returnValue(5));
 
                 oneOf(mockedDependency).isTheSpecialWeek();
                     will(returnValue(false));
@@ -168,6 +168,6 @@ public class DiscountManagerTest {
         mockingContext.assertIsSatisfied();
 
         // make sure that the actual value exactly equals the expected value
-        assertEquals(expectedPrice, actual);
+        assertEquals(expectedPrice, actual, 0.01);
     }
 }
