@@ -170,4 +170,63 @@ public class DiscountManagerTest {
         // make sure that the actual value exactly equals the expected value
         assertEquals(expectedPrice, actual, 0.01);
     }
+
+    //boundary tests
+
+    //test when price is max double value and isTheSpecialWeek() is false, and getDiscountPercentage() has the week number as even
+    @Test
+    public void testCalculatePriceWhenPriceIsMAX() throws Exception {
+        // Arrange
+        boolean isDiscountsSeason = true;
+        double originalPrice = Double.MAX_VALUE;
+        double expectedPrice = originalPrice * 0.07;
+
+        //mocking obj
+        Mockery mockingContext = new Mockery();
+
+        //mocked class
+        IDiscountCalculator mockedDependency = mockingContext.mock(IDiscountCalculator.class);
+        mockingContext.checking(new Expectations(){
+            {
+                oneOf(mockedDependency).isTheSpecialWeek();
+                    will(returnValue(false));
+                oneOf(mockedDependency).getDiscountPercentage();
+                    will(returnValue(7));
+            }
+        });
+        DiscountManager discountManager = new DiscountManager(isDiscountsSeason, mockedDependency);
+        // Act
+        double actual=discountManager.calculatePriceAfterDiscount(originalPrice);
+
+        // Assert
+        // make sure that mocking Expectations Is Satisfied
+        mockingContext.assertIsSatisfied();
+
+        // make sure that the actual value exactly equals the expected value
+        assertEquals(expectedPrice, actual, originalPrice * 0.00001);
+    }
+
+
+    @Test
+    public void testCalculatePriceWhenPriceIsMinimum() {
+        boolean isDiscountsSeason = true;
+        double originalPrice = 0.01;
+
+        Mockery context = new Mockery();
+        IDiscountCalculator mockedDependency = context.mock(IDiscountCalculator.class);
+
+        context.checking(new Expectations() {{
+            oneOf(mockedDependency).isTheSpecialWeek(); will(returnValue(true));
+            never(mockedDependency).getDiscountPercentage();
+        }});
+
+        DiscountManager manager = new DiscountManager(isDiscountsSeason, mockedDependency);
+
+        double actual = manager.calculatePriceAfterDiscount(originalPrice);
+        double expected = originalPrice * 0.8;
+
+        context.assertIsSatisfied();
+        assertEquals(expected, actual, 0.0001);
+    }
+
 }
