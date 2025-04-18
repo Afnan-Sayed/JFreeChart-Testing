@@ -60,6 +60,8 @@ public class DiscountManagerTest {
                 //i used this and not 'allowing' as allowing has the probability of not calling this function,
                 //but in this test case it is a must to be called and only once
                 oneOf(mockedDependency).isTheSpecialWeek();
+                //and never call getDiscountPercentage
+                never(mockedDependency).getDiscountPercentage();
                 will(returnValue(expectedPrice));
             }
         });
