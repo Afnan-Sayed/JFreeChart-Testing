@@ -11,6 +11,7 @@ import static org.junit.Assert.*;
 
 public class DiscountCalculatorTest {
 
+    // isTheSpecialWeek() tests
     @Test
     public void testIsTheSpecialWeekWhenFalse() throws Exception {
         // Arrange
@@ -26,6 +27,7 @@ public class DiscountCalculatorTest {
         assertFalse(calculatorToTest.isTheSpecialWeek());
     }
 
+
     @Test
    public void testIsTheSpecialWeekWhenTrue() throws Exception {
         Calendar calendar = Calendar.getInstance();
@@ -36,6 +38,55 @@ public class DiscountCalculatorTest {
 
         assertTrue(calculator.isTheSpecialWeek());
    }
+
+
+    @Test
+    public void testIsTheSpecialWeekWithWrongDate() throws Exception {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2025, Calendar.JUNE, 20); // Before week 26 starts
+        Week week = new Week(calendar.getTime());
+
+        DiscountCalculator calculator = new DiscountCalculator(week);
+
+        assertFalse(calculator.isTheSpecialWeek()); // Should be false
+    }
+
+    // Edge cases
+
+    @Test
+    public void testWeirdDateLikeLeapYear() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2024, Calendar.FEBRUARY, 29); // Valid leap year date
+        Week week = new Week(calendar.getTime());
+
+        DiscountCalculator calculator = new DiscountCalculator(week);
+        assertNotNull(calculator.getDiscountPercentage()); // It should still behave normally
+    }
+
+    @Test
+    public void testVeryOldDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(1900, Calendar.JANUARY, 1);
+        Week week = new Week(calendar.getTime());
+
+        DiscountCalculator calculator = new DiscountCalculator(week);
+        int discount = calculator.getDiscountPercentage();
+        assertTrue(discount == 5 || discount == 7); // Week might be odd or even
+    }
+
+    @Test
+    public void testFarFutureDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(3000, Calendar.DECEMBER, 31);
+        Week week = new Week(calendar.getTime());
+
+        DiscountCalculator calculator = new DiscountCalculator(week);
+        int discount = calculator.getDiscountPercentage();
+        assertTrue(discount == 5 || discount == 7);
+    }
+
+
+    // Discount percentage tests
 
     @Test
     public void testGetDiscountPercentageEvenWeek() throws Exception {
@@ -61,24 +112,39 @@ public class DiscountCalculatorTest {
     }
 
 
+    // Boundary cases
     @Test
-    public void testIsTheSpecialWeekWithWrongDate() throws Exception {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2025, Calendar.JUNE, 20); // Before week 26 starts
-        Week week = new Week(calendar.getTime());
-
-        DiscountCalculator calculator = new DiscountCalculator(week);
-
-        assertFalse(calculator.isTheSpecialWeek()); // Should be false
+    public void getDiscountPercentage_ShouldWork_ForFirstWeek() {
+        Week firstWeek = new Week(1, 2023);
+        DiscountCalculator calculator = new DiscountCalculator(firstWeek);
+        assertEquals(5, calculator.getDiscountPercentage());  // Week 1 is odd
     }
 
-    @Test(expected = NullPointerException.class)
-  //  Purpose: This tells JUnit to expect a NullPointerException to be thrown during the execution of the test. If the NullPointerException is thrown at any point during the execution of the test, the test will pass. If the exception is not thrown (or if a different exception is thrown), the test will fail.
-  //  How it works: The test will continue executing until it reaches a line where the exception is expected. If that exception occurs, JUnit considers the test successful. If the exception doesn't happen, JUnit will fail the test and indicate that it was expecting an exception but none was thrown.
-    public void testWithNullWeek() {
-        DiscountCalculator calculator = new DiscountCalculator(null);
-        calculator.isTheSpecialWeek();
+
+    @Test
+    public void getDiscountPercentage_ShouldWork_ForLastWeek() {
+        Week lastWeek = new Week(53, 2023);  // Some years have 53 weeks
+        DiscountCalculator calculator = new DiscountCalculator(lastWeek);
+        assertEquals(5, calculator.getDiscountPercentage());  // Week 53 is odd
     }
+
+    // Constructor tests
+
+    @Test
+    public void testNullWeekThrowsNPE() {
+        assertThrows(NullPointerException.class, () -> {
+            new DiscountCalculator(null); // Constructor rejects null
+        });
+    }
+
+    //    @Test
+//    public void NullValueGet(){
+//        DiscountCalculator calculator = new DiscountCalculator(null);
+//        assertThrows(NullPointerException.class, () -> {
+//            calculator.getDiscountPercentage();
+//        });
+//    }
+
 
     // Test missing cases ( JUNE, 23 is a date in week 26 )
 
