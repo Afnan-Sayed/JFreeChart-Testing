@@ -41,7 +41,39 @@ public class DiscountManagerTest {
     }
 
     @Test
-    public void testCalculatePriceWhenDiscountsSeasonIsTrueAndSpecialWeekIsTrue() throws Exception {
+    public void testCalculatePriceWhenDiscountsSeasonIsTrueAndSpecialWeekIsTrue() throws Exception
+    {
+        //Arrange
+        boolean isDiscountsSeason = true;
+        double originalPrice = 100.0;
+        double expectedPrice = 80.0;
+
+        //mocking obj
+        Mockery mockingContext = new Mockery();
+
+        //mocked class
+        IDiscountCalculator mockedDependency = mockingContext.mock(IDiscountCalculator.class);
+
+        //expectation
+        mockingContext.checking(new Expectations(){
+            {
+                //i used this and not 'allowing' as allowing has the probability of not calling this function,
+                //but in this test case it is a must to be called and only once
+                oneOf(mockedDependency).isTheSpecialWeek();
+                will(returnValue(expectedPrice));
+            }
+        });
+
+        DiscountManager discountManager = new DiscountManager(isDiscountsSeason, mockedDependency);
+        // Act
+        double actual=discountManager.calculatePriceAfterDiscount(originalPrice);
+
+        // Assert
+        // make sure that mocking Expectations Is Satisfied
+        mockingContext.assertIsSatisfied();
+
+        // make sure that the actual value exactly equals the expected value
+        assertEquals(expectedPrice, actual);
 
     }
 
