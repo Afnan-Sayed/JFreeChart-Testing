@@ -126,4 +126,48 @@ public class DiscountManagerTest {
         assertEquals(expectedPrice, actual);
 
     }
+
+    @Test
+    public void testCalculatePriceWhenDiscountsSeasonIsTrueAndSpecialWeekIsFalseAndWeekNumberIsOdd () throws Exception
+    {
+        //Arrange
+        boolean isDiscountsSeason = true;
+
+        Week w = new Week(27, 2025);
+
+        //the concrete class to test its logic when week num id even
+        DiscountCalculator concreteCalc= new DiscountCalculator(w);
+
+        double originalPrice = 100.0;
+        double expectedPrice =concreteCalc.getDiscountPercentage(); //50.0
+
+        //mocking obj
+        Mockery mockingContext = new Mockery();
+
+        //mocked class
+        IDiscountCalculator mockedDependency = mockingContext.mock(IDiscountCalculator.class);
+
+        //expectation
+        mockingContext.checking(new Expectations(){
+            {
+                oneOf(mockedDependency).getDiscountPercentage();
+                    will(returnValue(expectedPrice));
+
+                oneOf(mockedDependency).isTheSpecialWeek();
+                    will(returnValue(false));
+            }
+        });
+
+        DiscountManager discountManager = new DiscountManager(isDiscountsSeason, mockedDependency);
+
+        // Act
+        double actual=discountManager.calculatePriceAfterDiscount(originalPrice);
+
+        // Assert
+        // make sure that mocking Expectations Is Satisfied
+        mockingContext.assertIsSatisfied();
+
+        // make sure that the actual value exactly equals the expected value
+        assertEquals(expectedPrice, actual);
+    }
 }
