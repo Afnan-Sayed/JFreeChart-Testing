@@ -46,7 +46,12 @@ public class YearTest {
     public void testConstructorBelowLowerBound() {
         new Year(1899);
     }
-   
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructorWithTooLowYear() {
+        new Year(-10000); //  Invalid for both library and logic
+    }
+
+
     @Test
     public void testDateConstructor_ValidDate() {
         // Create a date for July 18, 2020
