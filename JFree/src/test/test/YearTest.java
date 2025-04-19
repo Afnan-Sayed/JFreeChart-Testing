@@ -24,42 +24,48 @@ public class YearTest {
 ////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////// previous() ///////////////////////////////////////
 /*
-@return The year preceding this one (or {@code null} if the current year is -9999).
-/*
-    characteristic 1: year > -9999 and !=0
-        b1: yes                   -> c11  //new Year(this.year - 1)
-        b2: no (when year<=-9999) -> c12  //yetla3 null
+    characteristic 1: 1900<year<=9999
+        b1: yes                                  -> c11  //new Year(this.year - 1)
+        b2: no (when year<=1900 or year>9999)    -> c12  //yetla3 null
 
-    characteristic 2: year =0
-        b1: yes                   -> c21  //new Year(this.year - 1)
-
-    so we have 4 test cases should be covered
+    so we have 5 test cases should be covered (including boundaries)
      */
     @Test
-    public void testPreviousWhenYearIsValidAndNotEqualZero()
+    public void testPreviousWhenYearIsValid1()
     {
-        int y= -9998;
+        int y= 1901;
         Year year =new Year(y);
 
         //as year extends RegularTimePeriod and the req type is RegularTimePeriod, so we cast to (Year)
         Year actual = (Year) year.previous();
-        assertEquals(-9999, actual.getYear());
+        assertEquals(1900, actual.getYear());
     }
     @Test
-    public void testPreviousWhenYearIsValidAndEqualsZero()
+    public void testPreviousWhenYearIsValid2()
     {
-        int y= 0;
+        int y= 9999;
         Year year =new Year(y);
 
         //as year extends RegularTimePeriod and the req type is RegularTimePeriod, so we cast to (Year)
         Year actual = (Year) year.previous();
-        assertEquals(-1, actual.getYear());
+        assertEquals(9998, actual.getYear());
+    }
+
+    @Test
+    public void testPreviousWhenYearIsValid3()
+    {
+        int y= 1920;
+        Year year =new Year(y);
+
+        //as year extends RegularTimePeriod and the req type is RegularTimePeriod, so we cast to (Year)
+        Year actual = (Year) year.previous();
+        assertEquals(1919, actual.getYear());
     }
 
     @Test
     public void testPreviousWhenYearIsInValid1()
     {
-        int y= -9999;
+        int y= 1900;
         Year year =new Year(y);
 
         //as year extends RegularTimePeriod and the req type is RegularTimePeriod, so we cast to (Year)
@@ -70,7 +76,18 @@ public class YearTest {
     @Test
     public void testPreviousWhenYearIsInValid2()
     {
-        int y = -10000;
+        int y= 1899;
+        Year year =new Year(y);
+
+        //as year extends RegularTimePeriod and the req type is RegularTimePeriod, so we cast to (Year)
+        Year actual = (Year) year.previous();
+        assertNull(actual);
+    }
+
+    @Test
+    public void testPreviousWhenYearIsInValid3()
+    {
+        int y = 10000;
         Year year =new Year(y);
 
         //as year extends RegularTimePeriod and the req type is RegularTimePeriod, so we cast to (Year)
