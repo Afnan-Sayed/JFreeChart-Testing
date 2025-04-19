@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="allure-java-commons-2.13.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/JFree/lib/allure-java-commons-2.13.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/JFree/lib/allure-junit4-2.13.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/JFree/lib/aspectjweaver-1.9.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/JFree/lib/allure-java-commons-2.29.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/JFree/lib/allure-junit4-2.29.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/JFree/lib/allure-model-2.29.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/JFree/lib/aspectjweaver-1.9.24.jar!/" />
+      <root url="jar://$PROJECT_DIR$/JFree/lib/slf4j-api-1.7.36.jar!/" />
+      <root url="jar://$PROJECT_DIR$/JFree/lib/slf4j-simple-1.7.36.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
