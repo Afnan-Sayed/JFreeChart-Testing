@@ -20,28 +20,41 @@ public class YearTest {
         arrange();
         assertEquals(2025, year.getYear());
     }
+
+
     //valid input
     @Test
     public void testIntConstructor_ValidYear() {
         Year year = new Year(2023);
         assertEquals(2023, year.getYear());
     }
-    //below minimum (-10000)
+
     @Test
-    (expected = IllegalArgumentException.class)
-    public void testIntConstructor_YearBelowMinimum() {
-        new Year(-10000);  // Should throw exception
+    public void testConstructorAtLowerBound() {
+        Year y = new Year(1900);
+        assertEquals(1900, y.getYear());}
+    @Test
+    public void testConstructorAtUpperBound() {
+        Year y = new Year(9999);
+        assertEquals(9999, y.getYear());
     }
-    //above maximum (10000).
     @Test(expected = IllegalArgumentException.class)
-    public void testIntConstructor_YearAboveMaximum() {
-        new Year(10000);  // Should throw exception
+    public void testConstructorAboveUpperBound() {
+        new Year(10000);
+    }
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructorBelowLowerBound() {
+        new Year(1899);
+    }
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructorRejectsNegativeYear() {
+        new Year(-1); // Fails because it actually does NOT throw an error
     }
     @Test
     public void testDateConstructor_ValidDate() {
-        // Create a date for July 15, 2020
+        // Create a date for July 18, 2020
         Calendar cal = Calendar.getInstance();
-        cal.set(2020, Calendar.JULY, 15);
+        cal.set(2020, Calendar.JULY, 18);
         Date testDate = cal.getTime();
 
         Year year = new Year(testDate);
@@ -63,20 +76,11 @@ public class YearTest {
         Year year = new Year(testDate, TimeZone.getDefault(), Locale.US);
         assertEquals(2010, year.getYear());
     }
+    @Test(expected = NullPointerException.class)
+    public void testConstructorFromDateZoneLocaleNull() {
+        new Year(null, TimeZone.getDefault(), Locale.getDefault());
+    }
 
-    /*@Test
-    public void testDateCalendarConstructor() {
-        // Create date for April 15, 2005
-        Calendar dateCal = Calendar.getInstance();
-        dateCal.set(2005, Calendar.APRIL, 15);
-        Date testDate = dateCal.getTime();
-
-        // Use a different timezone for calculations
-        Calendar calculationCal = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.US);
-//no cons for it
-        Year year = new Year(testDate,calculationCal);
-        assertEquals(2005, year.getYear());
-    }*/
     @Test
     public void testGetYear() {
         Year year = new Year(2025);
