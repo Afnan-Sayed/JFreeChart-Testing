@@ -2,7 +2,7 @@ package JFree;
 
 import org.jfree.data.time.Week;
 
-public class DiscountCalculator implements IDiscountCalculator {
+public class DiscountCalculator implements JFree.IDiscountCalculator {
 
     private final Week currentWeek;
     private final int specialWeek = 26;

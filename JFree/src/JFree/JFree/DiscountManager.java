@@ -2,9 +2,9 @@ package JFree;
 
 public class DiscountManager {
     boolean isDiscountsSeason;
-    IDiscountCalculator discountCalculator;
+    JFree.IDiscountCalculator discountCalculator;
 
-    public DiscountManager(boolean isDiscountsSeason, IDiscountCalculator discountCalculator) {
+    public DiscountManager(boolean isDiscountsSeason, JFree.IDiscountCalculator discountCalculator) {
         this.isDiscountsSeason = isDiscountsSeason;
         this.discountCalculator = discountCalculator;
     }

@@ -106,10 +106,10 @@ public class DiscountManagerTest {
         mockingContext.checking(new Expectations(){
             {
                 oneOf(mockedDependency).getDiscountPercentage();
-                    will(returnValue(7));
+                will(returnValue(7));
 
                 oneOf(mockedDependency).isTheSpecialWeek();
-                    will(returnValue(false));
+                will(returnValue(false));
             }
         });
 
@@ -151,10 +151,10 @@ public class DiscountManagerTest {
         mockingContext.checking(new Expectations(){
             {
                 oneOf(mockedDependency).getDiscountPercentage();
-                    will(returnValue(5));
+                will(returnValue(5));
 
                 oneOf(mockedDependency).isTheSpecialWeek();
-                    will(returnValue(false));
+                will(returnValue(false));
             }
         });
 
@@ -189,9 +189,9 @@ public class DiscountManagerTest {
         mockingContext.checking(new Expectations(){
             {
                 oneOf(mockedDependency).isTheSpecialWeek();
-                    will(returnValue(false));
+                will(returnValue(false));
                 oneOf(mockedDependency).getDiscountPercentage();
-                    will(returnValue(7));
+                will(returnValue(7));
             }
         });
         DiscountManager discountManager = new DiscountManager(isDiscountsSeason, mockedDependency);

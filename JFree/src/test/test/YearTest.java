@@ -1,6 +1,5 @@
 package test;
 
-import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.Year;
 import org.junit.Test;
 

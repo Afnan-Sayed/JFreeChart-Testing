@@ -1,6 +1,4 @@
 package test;
-
-import JFree.DiscountCalculator;
 import org.jfree.data.time.Week;
 import org.junit.Test;
 
