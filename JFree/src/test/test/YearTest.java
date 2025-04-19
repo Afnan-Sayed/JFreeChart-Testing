@@ -5,8 +5,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class YearTest {
     Year year;
@@ -119,8 +118,8 @@ public class YearTest {
     }
 
 
-    ////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////// Peg(Calendar calendar) ////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// Peg(Calendar calendar) ////////////////////////////////////
 /*
 Recalculates the start date/time and end date/time for this time period relative to the supplied calendar (which incorporates a time zone).
 Parameters: calendar - the calendar (null not permitted).
@@ -306,12 +305,120 @@ Peg(Calendar calendar)
         assertNull(actual);
     }
 
+
+////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////// next() ///////////////////////////////////////
+
+    /*
+ public RegularTimePeriod next() {return this.year < 9999 ? new Year(this.year + 1) : null;}
+ The year following this one (or null if the current year is 9999).
+
+
+    characteristic 1: year < 9999 and !=0
+        b1: yes                   -> c11  //new Year(this.year + 1)
+        b2: no (when year>=9999) -> c12  //yetla3 null
+
+    characteristic 2: year =0
+        b1: yes                   -> c21  //new Year(this.year + 1)
+
+    so we have 4 test cases should be covered
+     */
+@Test
+public void testNextWhenYearIsValidAndNotEqualZero()
+{
+    int y= 9998;
+    Year year =new Year(y);
+
+    //as year extends RegularTimePeriod and the req type is RegularTimePeriod, so we cast to (Year)
+    Year actual = (Year) year.next();
+    assertEquals(9999, actual.getYear());
+}
     @Test
-    public void testNext(){}
+    public void testNextWhenYearIsValidAndEqualsZero()
+    {
+        int y= 0;
+        Year year =new Year(y);
+
+        //as year extends RegularTimePeriod and the req type is RegularTimePeriod, so we cast to (Year)
+        Year actual = (Year) year.next();
+        assertEquals(1, actual.getYear());
+    }
 
     @Test
-    public void testGetSerialIndex(){}
+    public void testNextWhenYearIsInValid1()
+    {
+        int y= 9999;
+        Year year =new Year(y);
 
+        //as year extends RegularTimePeriod and the req type is RegularTimePeriod, so we cast to (Year)
+        Year actual = (Year) year.next();
+        assertNull(actual);
+    }
+
+    @Test
+    public void testNextWhenYearIsInValid2()
+    {
+        int y = 10000;
+        Year year =new Year(y);
+
+        //as year extends RegularTimePeriod and the req type is RegularTimePeriod, so we cast to (Year)
+        Year actual = (Year) year.next();
+        assertNull(actual);
+    }
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// GetSerialIndex() ////////////////////////////////////
+/*
+Returns a serial index number for the year.
+The implementation simply returns the year number (e.g. 2002).
+
+    characteristic 1: 9999>=year>=1900
+        b1: yes                               -> c11  //return year
+        b2: no (when year>9999 or year<1900)  -> c12  //throw new IllegalArgumentException("Year constructor: year (" + year + ") outside valid range.");
+
+//lma ykon benhom
+//2 boundaries
+//greater that 9999
+less than 1900
+    so we have 5 test cases should be covered
+*/
+
+    @Test
+    public void testGetSerialIndexInRange(){
+        Year year = new Year(2000);
+        assertEquals(2000, year.getSerialIndex());
+    }
+
+    @Test
+    public void testGetSerialIndexBoundary1(){
+        Year year = new Year(9999);
+        assertEquals(9999, year.getSerialIndex());
+    }
+
+    @Test
+    public void testGetSerialIndexBoundary2(){
+        Year year = new Year(1900);
+        assertEquals(1900, year.getSerialIndex());
+    }
+
+    @Test
+    public void testGetSerialIndexOutBound1()
+    {
+        IllegalArgumentException exception = assertThrows (IllegalArgumentException.class, () -> new Year(10000));
+        assertEquals("Year constructor: year (10000) outside valid range.", exception.getMessage());
+    }
+
+
+    @Test
+    public void testGetSerialIndexOutBound2_WithMessage()
+    {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {new Year(1899);});
+        assertEquals("Year constructor: year (1899) outside valid range.", exception.getMessage());
+    }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// GetFirstMillisecond() ////////////////////////////////////
     //getFirstMillisecond(Calendar calendar)
     @Test
     public void testGetFirstMillisecond(){}
