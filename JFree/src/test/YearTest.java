@@ -1,11 +1,13 @@
 package test;
 
+import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.Year;
 import org.junit.Test;
 
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class YearTest {
     Year year;
@@ -37,7 +39,7 @@ public class YearTest {
     TODO: test each characteristic alone
      */
 
-////RelativeToTimeZoneInConstructor and normal year
+    ////RelativeToTimeZoneInConstructor and normal year
     @Test
     public void testGetLastMillisecondRelativeToTimeZoneInConstructorAndIsNormalYear(){
         //did not use .getdefault() as it produces different time zones according to which device is
@@ -59,32 +61,32 @@ public class YearTest {
         assertEquals(expected, actual);
     }
 
-////RelativeToTimeZoneInConstructor and leap year
+    ////RelativeToTimeZoneInConstructor and leap year
     @Test
     public void testGetLastMillisecondRelativeToTimeZoneInConstructorAndIsLeapYear() {
-    //did not use .getdefault() as it produces different time zones according to which device is
-    //the code running on, and unit testing must produce the same output each time
-    TimeZone tz = TimeZone.getTimeZone("Africa/Cairo"); //verified mn java
-    Locale locale = new Locale("ar", "EG");
+        //did not use .getdefault() as it produces different time zones according to which device is
+        //the code running on, and unit testing must produce the same output each time
+        TimeZone tz = TimeZone.getTimeZone("Africa/Cairo"); //verified mn java
+        Locale locale = new Locale("ar", "EG");
 
-    //badelo ay date el mohm ykon fe nafs el year ele b3mlha test '2025'
-    Date date = new GregorianCalendar(2024, Calendar.MAY, 17).getTime();
-    Year year = new Year(date, tz, locale);
+        //badelo ay date el mohm ykon fe nafs el year ele b3mlha test '2025'
+        Date date = new GregorianCalendar(2024, Calendar.MAY, 17).getTime();
+        Year year = new Year(date, tz, locale);
 
-    long actual = year.getLastMillisecond(); //bygeb las milli second fe 2025
+        long actual = year.getLastMillisecond(); //bygeb las milli second fe 2025
 
-    Calendar cal = Calendar.getInstance(tz, locale);
-    cal.set(2024, Calendar.DECEMBER, 31, 23, 59, 59);
-    cal.set(Calendar.MILLISECOND, 999);
-    long expected = cal.getTimeInMillis();
+        Calendar cal = Calendar.getInstance(tz, locale);
+        cal.set(2024, Calendar.DECEMBER, 31, 23, 59, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        long expected = cal.getTimeInMillis();
 
-    assertEquals(expected, actual);
-}
+        assertEquals(expected, actual);
+    }
 
-////RelativeToTimeZoneInCalendarInPeg and normal year
+    ////RelativeToTimeZoneInCalendarInPeg and normal year
     @Test
     public void testGetLastMillisecondRelativeToTimeZoneInCalendarInPegAndIsNormalYear() {
-       arrange();
+        arrange();
 
         TimeZone tz = TimeZone.getTimeZone("Africa/Cairo"); //verified mn java
         Calendar cal = Calendar.getInstance(tz);
@@ -99,27 +101,27 @@ public class YearTest {
         assertEquals(expected, actual);
     }
 
-////RelativeToTimeZoneInCalendarInPeg and leap year
+    ////RelativeToTimeZoneInCalendarInPeg and leap year
     @Test
     public void testGetLastMillisecondRelativeToTimeZoneInCalendarInPegAndIsLeapYear() {
-    arrange();
+        arrange();
 
-    TimeZone tz = TimeZone.getTimeZone("Africa/Cairo"); //verified mn java
-    Calendar cal = Calendar.getInstance(tz);
-    year.peg(cal);
+        TimeZone tz = TimeZone.getTimeZone("Africa/Cairo"); //verified mn java
+        Calendar cal = Calendar.getInstance(tz);
+        year.peg(cal);
 
-    long actual = year.getLastMillisecond();
+        long actual = year.getLastMillisecond();
 
-    cal.set(2024, Calendar.DECEMBER, 31, 23, 59, 59);
-    cal.set(Calendar.MILLISECOND, 999);
-    long expected = cal.getTimeInMillis();
+        cal.set(2024, Calendar.DECEMBER, 31, 23, 59, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        long expected = cal.getTimeInMillis();
 
-    assertEquals(expected, actual);
-}
+        assertEquals(expected, actual);
+    }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////// Peg(Calendar calendar) ////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////// Peg(Calendar calendar) ////////////////////////////////////
 /*
 Recalculates the start date/time and end date/time for this time period relative to the supplied calendar (which incorporates a time zone).
 Parameters: calendar - the calendar (null not permitted).
@@ -152,25 +154,25 @@ Peg(Calendar calendar)
     @Test
     public void testPegNotNullCalAndNormalYearAndCorrectYear()
     {
-    year = new Year(2025); //year=2025
-    TimeZone tz = TimeZone.getTimeZone("Africa/Cairo");
-    Calendar calendar = Calendar.getInstance(tz);
+        year = new Year(2025); //year=2025
+        TimeZone tz = TimeZone.getTimeZone("Africa/Cairo");
+        Calendar calendar = Calendar.getInstance(tz);
 
-    year.peg(calendar);
+        year.peg(calendar);
 
-    //last millisecond
-    //cal is 2025 same as year -> correct year
-    calendar.set(2025, Calendar.DECEMBER, 31, 23, 59, 59);
-    calendar.set(Calendar.MILLISECOND, 999);
-    long expectedLast = calendar.getTimeInMillis();
-    assertEquals(expectedLast, year.getLastMillisecond());
+        //last millisecond
+        //cal is 2025 same as year -> correct year
+        calendar.set(2025, Calendar.DECEMBER, 31, 23, 59, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        long expectedLast = calendar.getTimeInMillis();
+        assertEquals(expectedLast, year.getLastMillisecond());
 
-    //first millisecond
-    calendar.set(2025, Calendar.JANUARY, 1, 0, 0, 0);
-    calendar.set(Calendar.MILLISECOND, 0);
-    long expectedFirst = calendar.getTimeInMillis();
-    assertEquals(expectedFirst, year.getFirstMillisecond());
-}
+        //first millisecond
+        calendar.set(2025, Calendar.JANUARY, 1, 0, 0, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        long expectedFirst = calendar.getTimeInMillis();
+        assertEquals(expectedFirst, year.getFirstMillisecond());
+    }
 
 
     @Test
@@ -246,12 +248,64 @@ Peg(Calendar calendar)
         assertEquals(expectedFirst, year.getFirstMillisecond());
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////// previous() ///////////////////////////////////////
+/*
+@return The year preceding this one (or {@code null} if the current year is -9999).
+/*
+
+    characteristic 1: year > -9999 and !=0
+        b1: yes                   -> c11  //new Year(this.year - 1)
+        b2: no (when year<=-9999) -> c12  //yetla3 null
+
+    characteristic 2: year =0
+        b1: yes                   -> c21  //new Year(this.year - 1)
 
 
+    so we have 4 test cases should be covered
+     */
+    @Test
+    public void testPreviousWhenYearIsValidAndNotEqualZero()
+    {
+        int y= -9998;
+        Year year =new Year(y);
 
+        //as year extends RegularTimePeriod and the req type is RegularTimePeriod, so we cast to (Year)
+        Year actual = (Year) year.previous();
+        assertEquals(-9999, actual.getYear());
+    }
+    @Test
+    public void testPreviousWhenYearIsValidAndEqualsZero()
+    {
+        int y= 0;
+        Year year =new Year(y);
+
+        //as year extends RegularTimePeriod and the req type is RegularTimePeriod, so we cast to (Year)
+        Year actual = (Year) year.previous();
+        assertEquals(-1, actual.getYear());
+    }
 
     @Test
-    public void testPrevious(){}
+    public void testPreviousWhenYearIsInValid1()
+    {
+        int y= -9999;
+        Year year =new Year(y);
+
+        //as year extends RegularTimePeriod and the req type is RegularTimePeriod, so we cast to (Year)
+        Year actual = (Year) year.previous();
+        assertNull(actual);
+    }
+
+    @Test
+    public void testPreviousWhenYearIsInValid2()
+    {
+        int y = -10000;
+        Year year =new Year(y);
+
+        //as year extends RegularTimePeriod and the req type is RegularTimePeriod, so we cast to (Year)
+        Year actual = (Year) year.previous();
+        assertNull(actual);
+    }
 
     @Test
     public void testNext(){}
